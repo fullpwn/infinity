@@ -50,7 +50,7 @@ set -e -u -v
 start_time="$(date -u +%s)"
 
 # Install dependencies to build odysseyn1x
-apt-get update
+apt-get update --allow-unauthenticated
 apt-get install -y --no-install-recommends wget debootstrap grub-pc-bin \
     grub-efi-amd64-bin mtools squashfs-tools xorriso ca-certificates curl \
     libusb-1.0-0-dev gcc make gzip xz-utils unzip libc6-dev
