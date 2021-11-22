@@ -129,7 +129,7 @@ mkdir -p work/chroot/root/infinity/
 (
     cd work/chroot/root/
     # Download resources for Android Sandcastle
-    curl -L -O 'https://assets.checkra.in/downloads/sandcastle/dff60656db1bdc6a250d3766813aa55c5e18510694bc64feaabff88876162f3f/android-sandcastle.zip'
+    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/android-sandcastle.zip'
     unzip android-sandcastle.zip
     rm -f android-sandcastle.zip
     (
