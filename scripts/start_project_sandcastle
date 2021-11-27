@@ -20,7 +20,7 @@ cd /root/android-sandcastle/
 # Show ASCII art
 "${1}"_logo
 
-CHECKRA1N="$(/usr/bin/checkra1n -cpE > pongo_shell.log 2>&1 & echo $!)"
+CHECKRA1N="$(/usr/bin/checkra1n_old -cpE > pongo_shell.log 2>&1 & echo $!)"
 echo 'Please put your device into DFU mode'
 sleep 1
 while true; do
