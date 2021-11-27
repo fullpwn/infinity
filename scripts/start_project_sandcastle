@@ -14,7 +14,8 @@ case "$1" in
   exit 1
   ;;
 esac
-
+cd /usr/bin/
+chmod u+x ./checkra1n_old
 cd /root/android-sandcastle/
 
 # Show ASCII art
