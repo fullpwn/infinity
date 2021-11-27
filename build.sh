@@ -9,7 +9,7 @@
 }
 
 # Change these variables to modify the version of checkra1n
-CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n'
+CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/b0edbb87a5e084caf35795dcb3b088146ad5457235940f83e007f59ca57b319c/checkra1n-x86_64'
 CHECKRA1N_I686='https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n'
 
 GREEN="$(tput setaf 2)"
@@ -112,7 +112,7 @@ chroot work/chroot update-initramfs -u
 # Copy scripts
 cp scripts/* work/chroot/usr/bin/
 
-# Download resources for odysseyra1n
+# Download resources for infinity
 mkdir -p work/chroot/root/infinity/
 (
     cd work/chroot/root/infinity/

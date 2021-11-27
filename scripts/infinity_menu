@@ -31,12 +31,12 @@ while true; do
       break
       ;;
     5)
-      odysseyn1x_logo
+      infinity_logo
       sleep 2
       /usr/sbin/shutdown now
       ;;
     6)
-      odysseyn1x_logo
+      infinity_logo
       sleep 2
       /usr/sbin/reboot
       ;;

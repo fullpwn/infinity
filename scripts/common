@@ -80,7 +80,7 @@ linux_logo() {
   echo ''
 }
 
-odysseyn1x_logo() {
+infinity_logo() {
   clear
   # Vertically center text
   filling_lines="$((($(tput lines) - 5) / 2))" # Calculate number of filling lines
@@ -90,11 +90,11 @@ odysseyn1x_logo() {
     i="$(( i + 1 ))"
   done
   is_colored=false
-  center_text '  ___   __| |_   _ ___ ___  ___ _   _ _ __ / |_  __'
-  center_text ' / _ \ / _` | | | / __/ __|/ _ \ | | | `_ \| \ \/ /'
-  center_text '| (_) | (_| | |_| \__ \__ \  __/ |_| | | | | |>  < '
-  center_text ' \___/ \__,_|\__, |___/___/\___|\__, |_| |_|_/_/\_\'
-  center_text '             |___/              |___/              '
+  center_text '  _     ___ _     _ _      '
+  center_text ' |_|___|  _|_|___|_| |_ _ _'
+  center_text ' | |   |  _| |   | |  _| | |'
+  center_text ' |_|_|_|_| |_|_|_|_|_| |_  |'
+  center_text '                       |___|'
 }
 
 odysseyra1n_logo() {
