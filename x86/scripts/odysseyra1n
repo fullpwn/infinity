@@ -1,0 +1,126 @@
+#!/bin/sh
+# Load functions and variables
+. /usr/bin/common
+cd /root/odysseyra1n/
+
+# Show ASCII art
+odysseyra1n_logo
+
+# * Removed "$(uname)" = "Darwin" condition
+# * Removed CURRENTDIR and ODYSSEYDIR variables
+
+echo "Odysseyra1n Installation Script"
+echo "(C) 2021, CoolStar. All Rights Reserved"
+echo ""
+echo 'This script has been modified to work on odysseyn1x.'
+echo ''
+echo "Before you begin: If you're currently jailbroken with a different bootstrap installed, you will need to Reset System via the Loader app before running this script."
+# * Two following lines were added
+echo "Then jailbreak using checkra1n but don't install Cydia."
+echo 'Connect your iDevice to this computer'
+echo "Press enter to continue."
+read -r null
+
+# * Removed check if curl and iproxy are installed
+# * Removed "${ARM}" != yes condition
+# * Removed cd "$ODYSSEYDIR"
+echo '#!/bin/bash' > odysseyra1n-install.bash
+# * Removed "${ARM}" != yes condition
+# * Removed gzip decompression because we are using xz decompressed archives
+cat << "EOF" >> odysseyra1n-install.bash
+if [[ -f "/.bootstrapped" ]]; then
+    echo "Error: Migration from other bootstraps is no longer supported."
+    rm ./bootstrap* ./*.deb odysseyra1n-install.bash
+    exit 1
+fi
+if [[ -f "/.installed_odyssey" ]]; then
+        echo "Error: Odysseyra1n is already installed."
+        rm ./bootstrap* ./*.deb odysseyra1n-install.bash
+        exit 1
+fi
+VER=$(/binpack/usr/bin/plutil -key ProductVersion /System/Library/CoreServices/SystemVersion.plist)
+if [[ "${VER%%.*}" -ge 12 ]] && [[ "${VER%%.*}" -lt 13 ]]; then
+    CFVER=1500
+elif [[ "${VER%%.*}" -ge 13 ]]; then
+    CFVER=1600
+elif [[ "${VER%%.*}" -ge 14 ]]; then
+    CFVER=1700
+else
+    echo "${VER} not compatible."
+    exit 1
+fi
+mount -o rw,union,update /dev/disk0s1s1
+rm -rf /etc/{alternatives,apt,ssl,ssh,dpkg,profile{,.d}} /Library/dpkg /var/{cache,lib}
+tar --preserve-permissions -xkf bootstrap_${CFVER}.tar -C /
+SNAPSHOT=$(snappy -s | cut -d ' ' -f 3 | tr -d '\n')
+
+snappy -f / -r "$SNAPSHOT" -t orig-fs > /dev/null 2>&1
+/prep_bootstrap.sh >/dev/null 2>&1
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11:/usr/games
+if [[ $VER = 12.1* ]] || [[ $VER = 12.0* ]]; then
+    dpkg -i org.swift.libswift_5.0-electra2_iphoneos-arm.deb > /dev/null
+fi
+echo "(4) Installing Sileo..."
+dpkg -i org.coolstar.sileo_2.0.3_iphoneos-arm.deb > /dev/null
+mkdir -p /etc/apt/sources.list.d /etc/apt/preferences.d
+{
+    echo "Types: deb"
+    echo "URIs: https://repo.theodyssey.dev/"
+    echo "Suites: ./"
+    echo "Components: "
+    echo ""   
+} > /etc/apt/sources.list.d/odyssey.sources
+touch /var/lib/dpkg/available
+touch /.mount_rw
+touch /.installed_odyssey
+rm ./bootstrap* ./*.deb odysseyra1n-install.bash
+echo "Done!"
+EOF
+
+# * Following line was added
+clear
+
+# * Added xz decompression
+if ! ls ./*.tar > /dev/null 2>&1; then
+	blue_echo '(1) Extracting resources...'
+	if xz -vd ./*.tar.xz; then
+		done_echo 'Done extracting resources.'
+	else
+		failed 'Failed to extract resources.'
+	fi
+fi
+
+# * Removed resource downloads
+IPROXY=$(iproxy 28605 44 >/dev/null 2>&1 & echo $!)
+
+# * Removed ! "${ARM}" = yes condition
+# * echo with blue instead of white and changed number
+blue_echo "(2) Copying resources to your device..."
+# * Removed password indication
+# * Added check if command is successful
+# * Added sshpass -p 'alpine'
+# * Removed .gz extension because where are using xz decrompressed archives
+if sshpass -p 'alpine' scp -qP28605 -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" bootstrap_1500.tar \
+	bootstrap_1600.tar bootstrap_1700.tar \
+	org.coolstar.sileo_2.0.3_iphoneos-arm.deb \
+	org.swift.libswift_5.0-electra2_iphoneos-arm.deb \
+	odysseyra1n-install.bash \
+	root@127.0.0.1:/var/root/; then
+	done_echo 'Done copying resources to your device.'
+else
+	failed_echo 'Failed to copy resources to your device.'
+fi
+# * echo with blue instead of white and changed number
+blue_echo "(3) Bootstrapping your device..."
+# * Removed "${ARM}" = yes condition
+# * Removed password indication
+# * Added check if command is successful
+# * Added sshpass -p 'alpine'
+if sshpass -p 'alpine' ssh -qp28605 -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" root@127.0.0.1 "bash /var/root/odysseyra1n-install.bash"; then
+	done_echo 'Done bootstrapping your device.'
+else
+	failed_echo 'Failed to bootstrap your device.'
+fi
+# * Removed cd "$CURRENTDIR" and rm -rf "$ODYSSEYDIR"
+# * Removed kill "$IPROXY", handled by enter_to_quit
+enter_to_quit
