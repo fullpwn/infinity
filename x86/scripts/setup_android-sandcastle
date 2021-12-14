@@ -27,6 +27,7 @@ until [ "$port" = 22 ] || [ "$port" = 44 ]; do
 	esac
 done
 
+# shellcheck disable=SC2034
 IPROXY=$(iproxy 28605 "$port" >/dev/null 2>&1 & echo $!)
 
 clear
