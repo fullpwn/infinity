@@ -3,22 +3,25 @@ name: Build odysseyn1x
 on: push
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
+    - 
+      name: Checkout
+      uses: actions/checkout@v2
 
-    - uses: actions/checkout@v2
-
-    - name: Build for amd64
+    - 
+      name: Build for amd64
+      env:
+        VERSION: 1.0.1
+        ARCH: amd64
       run: |
-        sed -i "/Exit if user isn't root/aVERSION='$(<version)'" build.sh
-        sed -i "/Exit if user isn't root/aARCH='amd64'" build.sh
-        sudo ./build.sh
+        sudo x64/build.sh
 
-    - name: Build for i686
+    - 
+      name: Build for i686
+      env:
+        VERSION: 1.0.1
+        ARCH: i686
       run: |
-        sed -i "s/ARCH='amd64'/ARCH='i686'/g" build.sh
-        sudo ./build.sh
+        sudo x86/build.sh
