@@ -10,11 +10,10 @@ while true; do
   CHOICE="$(whiptail --nocancel --title "infinity" --menu '' $whiptail_height $whiptail_width 7 \
     '1' 'checkra1n' \
     '2' 'Project Sandcastle' \
-    '3' 'odysseyra1n' \
-    '4' 'SSH' \
-    '5' 'Shell' \
-    '6' 'Shut down' \
-    '7' 'Reboot' 3>&1 1>&2 2>&3)"
+    '3' 'SSH' \
+    '4' 'Shell' \
+    '5' 'Shut down' \
+    '6' 'Reboot' 3>&1 1>&2 2>&3)"
   case "$CHOICE" in
     1)
       clear
