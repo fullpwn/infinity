@@ -2,6 +2,9 @@
 # Made by fullpwn.
 # Some files were copied from odysseyn1x.
 
+# Shows all commands being run (useful for debugging)
+set -x
+
 # Exit if user isn't root
 [ "$(id -u)" -ne 0 ] && {
     echo 'Please run as root'
@@ -229,4 +232,6 @@ grub-mkrescue -o "./out/infinity-$VERSION-$ARCH.iso" work/iso \
 end_time="$(date -u +%s)"
 elapsed_time="$((end_time - start_time))"
 
+# Stop echoing commands
+set +x
 echo "Built infinity-$VERSION-$ARCH in $((elapsed_time / 60)) minutes and $((elapsed_time % 60)) seconds."
