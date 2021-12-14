@@ -17,6 +17,8 @@ jobs:
         VERSION: 1.0.1
         ARCH: amd64
       run: |
+        sed -i "/Exit if user isn't root/aVERSION='$VERSION'" x64/build.sh
+        sed -i "/Exit if user isn't root/aARCH='$ARCH'" build.sh
         sudo x64/build.sh
 
     - 
@@ -25,6 +27,7 @@ jobs:
         VERSION: 1.0.1
         ARCH: i686
       run: |
+        sed -i "s/ARCH='amd64'/ARCH='$ARCH'/g" build.sh
         sudo x86/build.sh
     -
       name: Upload artifacts
