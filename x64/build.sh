@@ -121,21 +121,6 @@ chroot work/chroot update-initramfs -u
 # Copy scripts
 cp x64/scripts/* work/chroot/usr/bin/
 
-# Download resources for infinity
-mkdir -p work/chroot/root/infinity/
-(
-    cd work/chroot/root/infinity/
-    curl -sL -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz \
-        -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz \
-        -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1700.tar.gz \
-        -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.3_iphoneos-arm.deb \
-        -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
-    # Rolling everything into one xz-compressed tarball (reduces size hugely)
-    gzip -dv ./*.tar.gz
-    tar -vc ./* | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
-    find ./* -not -name "odysseyra1n_resources.tar.xz" -exec rm {} +
-)
-
 (
     cd work/chroot/usr/bin/
     curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/checkra1n_old'
