@@ -141,6 +141,7 @@ mkdir -p work/chroot/root/infinity/
 (
     cd work/chroot/usr/bin/
     curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/checkra1n_old'
+    chmod +x checkra1n_old
 )
 
 (
@@ -217,11 +218,11 @@ umount work/chroot/sys
 umount work/chroot/dev
 cp work/chroot/vmlinuz work/iso/boot
 cp work/chroot/initrd.img work/iso/boot
-mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86
+mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86 -Xdict-size 100%
 
 ## Creates output ISO dir (easier for GitHub Actions)
-mkdir -pv ./out
-grub-mkrescue -o "./out/infinity-$VERSION-$ARCH.iso" work/iso \
+mkdir -p out
+grub-mkrescue -o "out/infinity-$VERSION-$ARCH.iso" work/iso \
     --compress=xz \
     --fonts='' \
     --locales='' \
