@@ -140,13 +140,13 @@ mkdir -p work/chroot/root/infinity/
 
 (
     cd work/chroot/usr/bin/
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/assets/checkra1n_old'
+    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/checkra1n_old'
 )
 
 (
     cd work/chroot/root/
     # Download resources for Android Sandcastle
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/assets/android-sandcastle.zip'
+    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/android-sandcastle.zip'
     unzip android-sandcastle.zip
     rm -f android-sandcastle.zip
     (
