@@ -9,8 +9,16 @@
 }
 
 # Change these variables to modify the version of checkra1n
+# If the latest version of checkra1n (at build time) is desired, leave the variables empty
 CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n'
 CHECKRA1N_I686='https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n'
+
+if [ -z "$CHECKRA1N_AMD64" ]; then
+    CHECKRA1N_AMD64=$(curl "https://checkra.in/releases/" | grep -Po "https://assets.checkra.in/downloads/linux/cli/x86_64/[0-9a-f]*/checkra1n")
+fi
+if [ -z "$CHECKRA1N_I686" ]; then
+    CHECKRA1N_I686=$(curl "https://checkra.in/releases/" | grep -Po "https://assets.checkra.in/downloads/linux/cli/i486/[0-9a-f]*/checkra1n")
+fi
 
 GREEN="$(tput setaf 2)"
 BLUE="$(tput setaf 6)"
@@ -121,9 +129,11 @@ mkdir -p work/chroot/root/infinity/
         -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1700.tar.gz \
         -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.3_iphoneos-arm.deb \
         -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
-    # Change compression format to xz
+    # Rolling everything into one xz-compressed tarball (reduces size hugely)
     gzip -dv ./*.tar.gz
-    xz -v9e -T0 ./*.tar
+    tar -vc * | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
+    rm ./*.tar.gz
+    
 )
 
 (
@@ -206,7 +216,10 @@ umount work/chroot/dev
 cp work/chroot/vmlinuz work/iso/boot
 cp work/chroot/initrd.img work/iso/boot
 mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86
-grub-mkrescue -o "infinity-$VERSION-$ARCH.iso" work/iso \
+
+## Creates output ISO dir (easier for GitHub Actions)
+mkdir -pv ./out
+grub-mkrescue -o "./out/infinity-$VERSION-$ARCH.iso" work/iso \
     --compress=xz \
     --fonts='' \
     --locales='' \
