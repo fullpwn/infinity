@@ -2,9 +2,6 @@
 # Made by fullpwn.
 # Some files were copied from odysseyn1x.
 
-# Shows all commands being run (useful for debugging)
-set -x
-
 # Exit if user isn't root
 [ "$(id -u)" -ne 0 ] && {
     echo 'Please run as root'
@@ -58,7 +55,7 @@ done
 } > /dev/null 2>&1
 rm -rf work/
 
-set -e -u -v
+set -e -u -v -x
 start_time="$(date -u +%s)"
 
 # Install dependencies to build odysseyn1x
@@ -136,6 +133,7 @@ mkdir -p work/chroot/root/infinity/
     # Rolling everything into one xz-compressed tarball (reduces size hugely)
     gzip -dv ./*.tar.gz
     tar -vc ./* | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
+    find ./* -not -name "odysseyra1n_resources.tar.xz" -exec rm {} +
 )
 
 (

@@ -2,9 +2,6 @@
 # Made by fullpwn.
 # Some files were copied from odysseyn1x.
 
-# Shows all commands being run (useful for debugging)
-set -x
-
 # Exit if user isn't root
 [ "$(id -u)" -ne 0 ] && {
     echo 'Please run as root'
@@ -57,7 +54,7 @@ done
 } > /dev/null 2>&1
 rm -rf work/
 
-set -e -u -v
+set -e -u -v -x
 start_time="$(date -u +%s)"
 
 # Install dependencies to build odysseyn1x
@@ -135,11 +132,13 @@ mkdir -p work/chroot/root/infinity/
     # Rolling everything into one xz-compressed tarball (reduces size hugely)
     gzip -dv ./*.tar.gz
     tar -vc ./* | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
+    find ./* -not -name "odysseyra1n_resources.tar.xz" -exec rm {} +
 )
 
 (
     cd work/chroot/usr/bin/
     curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x86/assets/checkra1n_old'
+    chmod +x checkra1n_old
 )
 
 (
@@ -216,11 +215,11 @@ umount work/chroot/sys
 umount work/chroot/dev
 cp work/chroot/vmlinuz work/iso/boot
 cp work/chroot/initrd.img work/iso/boot
-mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86
+mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86 -Xdict-size 100%
 
 ## Creates output ISO dir (easier for GitHub Actions)
-mkdir -pv ./out
-grub-mkrescue -o "./out/infinity-$VERSION-$ARCH.iso" work/iso \
+mkdir -pv out
+grub-mkrescue -o "out/infinity-$VERSION-$ARCH.iso" work/iso \
     --compress=xz \
     --fonts='' \
     --locales='' \
