@@ -1,7 +1,7 @@
 #!/bin/sh
 # Load functions and variables
 . /usr/bin/common
-cd /root/odysseyra1n/
+cd /root/infinity/ || failed_echo "/root/infinity doesn't exist!"; exit 1
 
 # Show ASCII art
 odysseyra1n_logo
@@ -19,7 +19,7 @@ echo "Before you begin: If you're currently jailbroken with a different bootstra
 echo "Then jailbreak using checkra1n but don't install Cydia."
 echo 'Connect your iDevice to this computer'
 echo "Press enter to continue."
-read -r null
+read -r
 
 # * Removed check if curl and iproxy are installed
 # * Removed "${ARM}" != yes condition
@@ -80,32 +80,23 @@ EOF
 # * Following line was added
 clear
 
-# * Added xz decompression
-if ! ls ./*.tar > /dev/null 2>&1; then
-	blue_echo '(1) Extracting resources...'
-	if xz -vd ./*.tar.xz; then
-		done_echo 'Done extracting resources.'
-	else
-		failed 'Failed to extract resources.'
-	fi
-fi
-
 # * Removed resource downloads
+# * Removed decompression stage because we're using a single tarball
+# $IPROXY is handled by enter_to_quit (see line 117)
+# shellcheck disable=SC2034
 IPROXY=$(iproxy 28605 44 >/dev/null 2>&1 & echo $!)
 
 # * Removed ! "${ARM}" = yes condition
 # * echo with blue instead of white and changed number
-blue_echo "(2) Copying resources to your device..."
+blue_echo "(1) Decompressing and copying resources to your device..."
 # * Removed password indication
 # * Added check if command is successful
 # * Added sshpass -p 'alpine'
 # * Removed .gz extension because where are using xz decrompressed archives
-if sshpass -p 'alpine' scp -qP28605 -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" bootstrap_1500.tar \
-	bootstrap_1600.tar bootstrap_1700.tar \
-	org.coolstar.sileo_2.0.3_iphoneos-arm.deb \
-	org.swift.libswift_5.0-electra2_iphoneos-arm.deb \
-	odysseyra1n-install.bash \
-	root@127.0.0.1:/var/root/; then
+# * Decompressed tarball is streamed directly to device, reducing memory impact on host
+if xz -vcd odysseyra1n_resources.tar.xz | \
+    sshpass -p 'alpine' ssh -p28605 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' root@127.0.0.1 'cat | tar -vx'; 
+    sshpass -p 'alpine' scp -P28605 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' odysseyra1n-install.bash root@127.0.0.1:/var/root; then
 	done_echo 'Done copying resources to your device.'
 else
 	failed_echo 'Failed to copy resources to your device.'

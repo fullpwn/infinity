@@ -1,3 +1,7 @@
+# This is a library for other scripts, it is not supposed to be run by itself
+# Thus, it doesn't need a shebang
+# shellcheck disable=SC2148
+
 # Set colors variables
 RED="$(tput setaf 1)"
 GREEN="$(tput setaf 2)"
@@ -28,7 +32,7 @@ prompt() {
 enter_to_quit() {
   kill "$IPROXY" "$CHECKRA1N" > /dev/null 2>&1
   printf 'Press enter to quit'
-  read -r null
+  read -r
 }
 
 center_text() {
