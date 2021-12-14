@@ -135,9 +135,7 @@ mkdir -p work/chroot/root/infinity/
         -O https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
     # Rolling everything into one xz-compressed tarball (reduces size hugely)
     gzip -dv ./*.tar.gz
-    tar -vc * | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
-    rm ./*.tar.gz
-    
+    tar -vc ./* | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
 )
 
 (
