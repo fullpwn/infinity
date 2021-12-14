@@ -122,7 +122,7 @@ chroot work/chroot update-initramfs -u
 )
 
 # Copy scripts
-cp scripts/* work/chroot/usr/bin/
+cp x64/scripts/* work/chroot/usr/bin/
 
 # Download resources for infinity
 mkdir -p work/chroot/root/infinity/
