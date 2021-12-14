@@ -1,7 +1,7 @@
 #!/bin/sh
 # Load functions and variables
 . /usr/bin/common
-cd /root/odysseyra1n/
+cd /root/odysseyra1n/ || failed_echo "/root/odysseyra1n doesn't exist!"; exit 1
 
 # Show ASCII art
 odysseyra1n_logo
@@ -19,7 +19,7 @@ echo "Before you begin: If you're currently jailbroken with a different bootstra
 echo "Then jailbreak using checkra1n but don't install Cydia."
 echo 'Connect your iDevice to this computer'
 echo "Press enter to continue."
-read -r null
+read -r
 
 # * Removed check if curl and iproxy are installed
 # * Removed "${ARM}" != yes condition
@@ -82,6 +82,8 @@ clear
 
 # * Removed resource downloads
 # * Removed decompression stage because we're using a single tarball
+# $IPROXY is handled by enter_to_quit (see line 117)
+# shellcheck disable=SC2034
 IPROXY=$(iproxy 28605 44 >/dev/null 2>&1 & echo $!)
 
 # * Removed ! "${ARM}" = yes condition
