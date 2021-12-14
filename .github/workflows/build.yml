@@ -25,3 +25,8 @@ jobs:
         ARCH: i686
       run: |
         sudo x86/build.sh
+    -
+      name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        path: out/*
