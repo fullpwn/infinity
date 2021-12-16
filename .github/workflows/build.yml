@@ -33,3 +33,46 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: out/*
+
+ upload-prerelease:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Download artifacts
+        uses: actions/download-artifact@v2
+      -
+        name: Get version information
+        run: |
+          echo "version=$(cat version)" >> $GITHUB_ENV
+          echo "todayDate=$(date +%Y%m%dT%H%M%S)" >> $GITHUB_ENV
+      -
+        name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.todayDate }}
+          release_name: Prerelease ${{ env.todayDate }}
+          draft: false
+          prerelease: true
+      - 
+        name: Attach binaries to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          todayDate: ${{ env.todayDate }}
+          version: ${{ env.version }}
+        run: |
+          set -x
+          mv ./artifact/infinity-$version-amd64.iso ./artifact/infinity-$todayDate-amd64.iso
+          mv ./artifact/infinity-$version-i686.iso ./artifact/infinity-$todayDate-i686.iso
+          assets=()
+          for asset in ./artifact/*; do
+            assets+=("-a" "$asset")
+          done
+          hub release edit "${assets[@]}" -m "This release was built on the latest code and may be unstable. USE AT YOUR OWN RISK!" $todayDate
+
