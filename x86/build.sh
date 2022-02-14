@@ -182,6 +182,7 @@ echo ' |_|_|_|_| |_|_|_|_|_| |_  |'
 echo '                       |___|'
 echo ''
 echo '         By fullpwn.'
+echo '           V 1.1'
 linux /boot/vmlinuz boot=live quiet
 initrd /boot/initrd.img
 boot
