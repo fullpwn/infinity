@@ -13,6 +13,8 @@
 CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n'
 CHECKRA1N_I686='https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n'
 
+#checkra1n 0.10.1 links here
+
 if [ -z "$CHECKRA1N_AMD64" ]; then
     CHECKRA1N_AMD64=$(curl "https://checkra.in/releases/" | grep -Po "https://assets.checkra.in/downloads/linux/cli/x86_64/[0-9a-f]*/checkra1n")
 fi
@@ -130,12 +132,13 @@ cp x64/scripts/* work/chroot/usr/bin/
 (
     cd work/chroot/root/
     # Download resources for Android Sandcastle
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/android-sandcastle.zip'
+#    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/android-sandcastle.zip'
+    curl -L -O 'https://assets.checkra.in/downloads/sandcastle/dff60656db1bdc6a250d3766813aa55c5e18510694bc64feaabff88876162f3f/android-sandcastle.zip'
     unzip android-sandcastle.zip
     rm -f android-sandcastle.zip
     (
         cd android-sandcastle/
-        rm -f iproxy ./*.dylib load-linux.mac ./*.sh README.txt
+        rm -f iproxy ./*.dylib load-linux.mac ./*.sh README.txt isetup
     )
 
     # Download resources for Linux Sandcastle
@@ -147,6 +150,8 @@ cp x64/scripts/* work/chroot/usr/bin/
         rm -f load-linux.mac README.txt
     )
 )
+
+cp x64/assets/isetup work/chroot/android-sandcastle
 
 (
     cd work/chroot/usr/bin/

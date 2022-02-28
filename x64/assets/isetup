@@ -1,0 +1,77 @@
+#!/bin/bash
+
+DISK=0
+DISKS=`ls -U /dev/disk0s1s*`
+echo "disks: $DISKS"
+
+for i in ${DISKS}
+do
+	LABEL=`/System/Library/Filesystems/apfs.fs/apfs.util -p $i`
+	if [ "${LABEL}" == "Android" ]; then
+		DISK=$i
+		echo "found an Android volume"
+		break;
+	fi
+done
+if [ ! -b ${DISK} ]; then
+	newfs_apfs -A -v Android -e /dev/disk0s1
+fi
+
+DISK=
+DISKS=`ls /dev/disk0s1s*`
+
+for i in ${DISKS}
+do
+	LABEL=`/System/Library/Filesystems/apfs.fs/apfs.util -p $i`
+	if [ "${LABEL}" == "Android" ]; then
+		if [ $i != "/dev/disk0s1s10" ]; then
+			DISK=$i
+			echo "found volume $i"
+			break;
+		fi
+	fi
+done
+if [ -b ${DISK} ]; then 
+	mkdir -p /mnt1
+	echo "Mounting ${DISK}"
+	mount -t apfs ${DISK} /mnt1
+	if [ $? -ne 0 ]; then
+		echo "failed to mount volume";
+		exit 1
+	fi
+	if [ -e /mnt1/nand ]; then
+		echo "Nand image already downloaded."
+	else
+		rm -rf /mnt1/nand
+		echo "Starting to download nand. This will take a few minutes"
+		wget http://assets.checkra.in/downloads/sandcastle/88b1089d97fe72ab77af8253ab7c312f8e789d49209234239be2408c3ad89a34/nand.gz -O /mnt1/nand.gz 
+		if [ $? -ne 0 ]; then
+			echo "Failed to download nand. Are you connected to wifi?"
+			umount /mnt1
+			exit 1;
+		fi
+		echo "Decompressing nand image"
+		gunzip -d /mnt1/nand.gz 
+		if [ $? -ne 0 ]; then
+			echo "Failed to decompress nand. Wifi disconnected? gzip not installed?"
+			echo "unmounting /mnt1"
+			umount /mnt1
+			exit 1;
+		fi
+		sync
+	fi
+	echo "Applying touchscreen/WiFi patch and copying driver files."
+	
+	# The Hack.
+	echo -n "  " | dd bs=1 seek=1145078249 count=2 status=none conv=notrunc of=/mnt1/nand
+	
+	# The Fix.
+	mkdir -p /mnt1/usr/share/firmware/
+	cp -rn /usr/share/firmware/* /mnt1/usr/share/firmware/
+	
+	umount /mnt1
+	echo "unmounted /mnt1"
+else
+	echo "disk not found somehow?"
+	exit 1
+fi
