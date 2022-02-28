@@ -13,8 +13,6 @@
 CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n'
 CHECKRA1N_I686='https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n'
 
-#checkra1n 0.10.1 links here
-
 if [ -z "$CHECKRA1N_AMD64" ]; then
     CHECKRA1N_AMD64=$(curl "https://checkra.in/releases/" | grep -Po "https://assets.checkra.in/downloads/linux/cli/x86_64/[0-9a-f]*/checkra1n")
 fi
@@ -124,8 +122,15 @@ chroot work/chroot update-initramfs -u
 cp x64/scripts/* work/chroot/usr/bin/
 
 (
+    # download checkra1n 0.10.1
     cd work/chroot/usr/bin/
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/checkra1n_old'
+    if [ "$ARCH" = 'amd64' ]; then
+        curl -L -O 'https://assets.checkra.in/downloads/linux/cli/x86_64/b0edbb87a5e084caf35795dcb3b088146ad5457235940f83e007f59ca57b319c/checkra1n-x86_64'
+        mv checkra1n-x86_64 checkra1n_old
+    else
+        curl -L -O 'https://assets.checkra.in/downloads/linux/cli/i486/9b7a5c7821c8e06a334b854c5ffad7b28c56a5ac261afe3c6b647c9ba7185aee/checkra1n-i486'
+        mv checkra1n-i486 checkra1n_old
+    fi
     chmod +x checkra1n_old
 )
 
@@ -140,7 +145,7 @@ cp x64/scripts/* work/chroot/usr/bin/
         cd android-sandcastle/
         rm -f iproxy ./*.dylib load-linux.mac ./*.sh README.txt isetup
     )
-
+    
     # Download resources for Linux Sandcastle
     curl -L -O 'https://assets.checkra.in/downloads/sandcastle/0175ae56bcba314268d786d1239535bca245a7b126d62a767e12de48fd20f470/linux-sandcastle.zip'
     unzip linux-sandcastle.zip
@@ -151,7 +156,8 @@ cp x64/scripts/* work/chroot/usr/bin/
     )
 )
 
-cp x64/assets/isetup work/chroot/android-sandcastle
+cp x64/assets/isetup work/chroot/android-sandcastle/
+chmod a+x work/chroot/android-sandcastle/isetup
 
 (
     cd work/chroot/usr/bin/
