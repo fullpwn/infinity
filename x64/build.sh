@@ -20,7 +20,6 @@ if [ -z "$CHECKRA1N_I686" ]; then
     CHECKRA1N_I686=$(curl "https://checkra.in/releases/" | grep -Po "https://assets.checkra.in/downloads/linux/cli/i486/[0-9a-f]*/checkra1n")
 fi
 
-
 GREEN="$(tput setaf 2)"
 BLUE="$(tput setaf 6)"
 NORMAL="$(tput sgr0)"
