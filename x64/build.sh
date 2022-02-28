@@ -155,8 +155,8 @@ cp x64/scripts/* work/chroot/usr/bin/
     )
 )
 
-cp x64/assets/isetup work/chroot/android-sandcastle/
-chmod a+x work/chroot/android-sandcastle/isetup
+cp x64/assets/isetup work/chroot/root/android-sandcastle/
+chmod a+x work/chroot/root/android-sandcastle/isetup
 
 (
     cd work/chroot/usr/bin/
