@@ -18,9 +18,7 @@ jobs:
       run: |
         #sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" build.sh
         #sed -i "/Exit if user isn't root/aARCH='$ARCH'" build.sh
-        VERSION='$(cat version)'
-        sudo ./build.sh
-
+        sudo env VERSION='$(cat version)' ./build.sh
     - 
       name: Build for i686
       env:
@@ -28,8 +26,7 @@ jobs:
       run: |
         #sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" build.sh
         #sed -i "/Exit if user isn't root/aARCH='$ARCH'" build.sh
-        VERSION='$(cat version)'
-        sudo ./build.sh
+        sudo env VERSION='$(cat version)' ./build.sh
     -
       name: Upload artifacts
       uses: actions/upload-artifact@v2
