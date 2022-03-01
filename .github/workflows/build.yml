@@ -16,18 +16,20 @@ jobs:
       env:
         ARCH: amd64
       run: |
-        sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" x64/build.sh
-        sed -i "/Exit if user isn't root/aARCH='$ARCH'" x64/build.sh
-        sudo x64/build.sh
+        #sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" build.sh
+        #sed -i "/Exit if user isn't root/aARCH='$ARCH'" build.sh
+        VERSION='$(cat version)'
+        sudo build.sh
 
     - 
       name: Build for i686
       env:
         ARCH: i686
       run: |
-        sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" x86/build.sh
-        sed -i "/Exit if user isn't root/aARCH='$ARCH'" x86/build.sh
-        sudo x86/build.sh
+        #sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" build.sh
+        #sed -i "/Exit if user isn't root/aARCH='$ARCH'" build.sh
+        VERSION='$(cat version)'
+        sudo build.sh
     -
       name: Upload artifacts
       uses: actions/upload-artifact@v2

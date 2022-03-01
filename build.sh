@@ -9,6 +9,11 @@
 }
 
 # Change these variables to modify the version of checkra1n
+
+# checkra1n 0.10.1
+CHECKRA1N_OLD_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/b0edbb87a5e084caf35795dcb3b088146ad5457235940f83e007f59ca57b319c/checkra1n-x86_64'
+CHECKRA1N_OLD_I686='https://assets.checkra.in/downloads/linux/cli/i486/9b7a5c7821c8e06a334b854c5ffad7b28c56a5ac261afe3c6b647c9ba7185aee/checkra1n-i486'
+
 # If the latest version of checkra1n (at build time) is desired, leave the variables empty
 CHECKRA1N_AMD64='https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n'
 CHECKRA1N_I686='https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n'
@@ -118,25 +123,33 @@ chroot work/chroot update-initramfs -u
 )
 
 # Copy scripts
-cp x86/scripts/* work/chroot/usr/bin/
+cp scripts/* work/chroot/usr/bin/
 
 (
+    # download checkra1n 0.10.1
     cd work/chroot/usr/bin/
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x86/assets/checkra1n_old'
+    if [ "$ARCH" = 'amd64' ]; then
+        curl -L -O "$CHECKRA1N_OLD_AMD64"
+        mv checkra1n-x86_64 checkra1n_old
+    else
+        curl -L -O "$CHECKRA1N_I686"
+        mv checkra1n-i486 checkra1n_old
+    fi
     chmod +x checkra1n_old
 )
 
 (
     cd work/chroot/root/
     # Download resources for Android Sandcastle
-    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x86/assets/android-sandcastle.zip'
+#    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/android-sandcastle.zip'
+    curl -L -O 'https://assets.checkra.in/downloads/sandcastle/dff60656db1bdc6a250d3766813aa55c5e18510694bc64feaabff88876162f3f/android-sandcastle.zip'
     unzip android-sandcastle.zip
     rm -f android-sandcastle.zip
     (
         cd android-sandcastle/
-        rm -f iproxy ./*.dylib load-linux.mac ./*.sh README.txt
+        rm -f iproxy ./*.dylib load-linux.mac ./*.sh README.txt isetup
     )
-
+    
     # Download resources for Linux Sandcastle
     curl -L -O 'https://assets.checkra.in/downloads/sandcastle/0175ae56bcba314268d786d1239535bca245a7b126d62a767e12de48fd20f470/linux-sandcastle.zip'
     unzip linux-sandcastle.zip
@@ -146,6 +159,9 @@ cp x86/scripts/* work/chroot/usr/bin/
         rm -f load-linux.mac README.txt
     )
 )
+
+cp assets/isetup work/chroot/root/android-sandcastle/
+chmod a+x work/chroot/root/android-sandcastle/isetup
 
 (
     cd work/chroot/usr/bin/
@@ -204,7 +220,7 @@ cp work/chroot/initrd.img work/iso/boot
 mksquashfs work/chroot work/iso/live/filesystem.squashfs -noappend -e boot -comp xz -Xbcj x86 -Xdict-size 100%
 
 ## Creates output ISO dir (easier for GitHub Actions)
-mkdir -pv out
+mkdir -p out
 grub-mkrescue -o "out/infinity-$VERSION-$ARCH.iso" work/iso \
     --compress=xz \
     --fonts='' \
