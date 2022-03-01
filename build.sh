@@ -132,7 +132,7 @@ cp scripts/* work/chroot/usr/bin/
         curl -L -O "$CHECKRA1N_OLD_AMD64"
         mv checkra1n-x86_64 checkra1n_old
     else
-        curl -L -O "$CHECKRA1N_I686"
+        curl -L -O "$CHECKRA1N_OLD_I686"
         mv checkra1n-i486 checkra1n_old
     fi
     chmod +x checkra1n_old
