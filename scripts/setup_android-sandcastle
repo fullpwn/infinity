@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Load functions and variables
 . /usr/bin/common
 cd /root/android-sandcastle/ || failed_echo "/root/android-sandcastle doesn't exist!";
