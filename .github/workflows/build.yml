@@ -16,15 +16,13 @@ jobs:
       env:
         ARCH: amd64
       run: |
-        VERSION=$(cat version)
-        sudo env ARCH='amd64' ./build.sh
+        sudo env VERSION=$(cat version) ARCH='amd64' ./build.sh
     - 
       name: Build for i686
       env:
         ARCH: i686
       run: |
-        VERSION=$(cat version)
-        sudo env ARCH='i686' ./build.sh
+        sudo env VERSION=$(cat version) ARCH='i686' ./build.sh
     -
       name: Upload artifacts
       uses: actions/upload-artifact@v2
