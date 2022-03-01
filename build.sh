@@ -36,6 +36,10 @@ ${GREEN}#                                          #${NORMAL}
 ${GREEN}############################################${NORMAL}
 
 EOF
+
+echo "VERSION: $VERSION"
+echo "ARCH: $ARCH"
+
 # Ask for the version and architecture if variables are empty
 while [ -z "$VERSION" ]; do
     printf 'Version: '
