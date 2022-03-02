@@ -161,7 +161,9 @@ cp scripts/* work/chroot/usr/bin/
         cd linux-sandcastle/
         rm -f load-linux.mac README.txt
     )
-    
+)
+
+(
     # Copy and set up iPhone scripts
     cp assets/isetup work/chroot/root/android-sandcastle/
     cp assets/iremove work/chroot/root/android-sandcastle/
