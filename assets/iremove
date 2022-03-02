@@ -3,8 +3,6 @@
 # Based on https://github.com/306bobby/projectsandcastlefix and https://projectsandcastle.org/
 
 
-echo "dummy testing script. no files will be removed."
-
 # Check for an Android filesystem.
 
 LABEL=
@@ -69,10 +67,10 @@ if [ ! "$CONFIRM" == "yes" ]; then
 fi
 
 echo "Removing nand file..."
-echo "rm -rf /tmp/mnt/nand"
+rm -rf /tmp/mnt/nand
 
 # Remove firmware files
-echo "rm -rf /tmp/mnt/usr"
+rm -rf /tmp/mnt/usr
 sync
 
 umount /tmp/mnt
