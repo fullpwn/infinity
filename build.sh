@@ -164,8 +164,14 @@ cp scripts/* work/chroot/usr/bin/
     )
 )
 
-cp assets/isetup work/chroot/root/android-sandcastle/
-chmod a+x work/chroot/root/android-sandcastle/isetup
+(
+    # Copy and set up iPhone scripts
+    cp assets/isetup work/chroot/root/android-sandcastle/
+    chmod a+x work/chroot/root/android-sandcastle/isetup
+    
+    cp assets/iremove work/chroot/root/android-sandcastle/
+    chmod a+x work/chroot/root/android-sandcastle/iremove
+)
 
 (
     cd work/chroot/usr/bin/
