@@ -145,7 +145,6 @@ cp scripts/* work/chroot/usr/bin/
 (
     cd work/chroot/root/
     # Download resources for Android Sandcastle
-#    curl -L -O 'https://github.com/fullpwn/infinity/raw/main/x64/assets/android-sandcastle.zip'
     curl -L -O 'https://assets.checkra.in/downloads/sandcastle/dff60656db1bdc6a250d3766813aa55c5e18510694bc64feaabff88876162f3f/android-sandcastle.zip'
     unzip android-sandcastle.zip
     rm -f android-sandcastle.zip
@@ -162,14 +161,11 @@ cp scripts/* work/chroot/usr/bin/
         cd linux-sandcastle/
         rm -f load-linux.mac README.txt
     )
-)
-
-(
+    
     # Copy and set up iPhone scripts
     cp assets/isetup work/chroot/root/android-sandcastle/
-    chmod a+x work/chroot/root/android-sandcastle/isetup
-    
     cp assets/iremove work/chroot/root/android-sandcastle/
+    chmod a+x work/chroot/root/android-sandcastle/isetup
     chmod a+x work/chroot/root/android-sandcastle/iremove
 )
 
