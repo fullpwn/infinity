@@ -10,24 +10,22 @@ jobs:
     - 
       name: Checkout
       uses: actions/checkout@v2
-
+    -
+      name: Get version information
+      run: |
+        echo "VERSION=$(cat version)" >> $GITHUB_ENV
     - 
       name: Build for amd64
       env:
         ARCH: amd64
       run: |
-        sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" x64/build.sh
-        sed -i "/Exit if user isn't root/aARCH='$ARCH'" x64/build.sh
-        sudo x64/build.sh
-
+        sudo -E ./build.sh
     - 
       name: Build for i686
       env:
         ARCH: i686
       run: |
-        sed -i "/Exit if user isn't root/aVERSION='$(cat version)'" x86/build.sh
-        sed -i "/Exit if user isn't root/aARCH='$ARCH'" x86/build.sh
-        sudo x86/build.sh
+        sudo -E ./build.sh
     -
       name: Upload artifacts
       uses: actions/upload-artifact@v2
@@ -75,4 +73,3 @@ jobs:
             assets+=("-a" "$asset")
           done
           hub release edit "${assets[@]}" -m "This release was built on the latest code and may be unstable. USE AT YOUR OWN RISK!" $todayDate
-
