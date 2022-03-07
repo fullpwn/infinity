@@ -78,7 +78,7 @@ if [ "$ARCH" = 'amd64' ]; then
     apt install -y --no-install-recommends grub-efi-amd64-bin grub-pc-bin
 else
     # remove all grub packges (specifically grub-efi-amd64-*). grub-mkrescue doesn't have any architecture configuration other than the set of installed packages.
-    apt-get remove -y '.grub.'
+    apt-get remove -y 'grub.'
     
     # Install depencies to build odysseyn1x for i686
     dpkg --add-architecture i386
