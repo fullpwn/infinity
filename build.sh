@@ -77,8 +77,8 @@ if [ "$ARCH" = 'amd64' ]; then
     KERNEL_ARCH='amd64' # Debian's 32-bit kernels are suffixed "amd64"
     apt install -y --no-install-recommends grub-efi-amd64-bin grub-pc-bin
 else
-    # remove all grub packges (specifically grub-efi-amd64-*). grub-mkrescue doesn't have any architecture configuration other than the set of installed packages.
-    apt-get remove -y 'grub.'
+    # remove grub-efi-amd64-bin. grub-mkrescue doesn't have any architecture configuration other than the set of installed packages.
+    apt-get remove -y --allow-remove-essential grub-efi-amd64-bin grub-efi-amd64-signed
     
     # Install depencies to build odysseyn1x for i686
     dpkg --add-architecture i386
