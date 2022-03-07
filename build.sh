@@ -83,7 +83,8 @@ else
     # Install depencies to build odysseyn1x for i686
     dpkg --add-architecture i386
     apt-get update
-    apt install -y --no-install-recommends libusb-1.0-0-dev:i386 gcc-multilib grub-efi-ia32-bin grub-pc-bin
+    apt install -y --no-install-recommends libusb-1.0-0-dev:i386 gcc-multilib grub-pc-bin
+    #grub-efi-ia32-bin
     REPO_ARCH='i386' # Debian's 32-bit repos are "i386"
     KERNEL_ARCH='686' # Debian's 32-bit kernels are suffixed "-686"
 fi
