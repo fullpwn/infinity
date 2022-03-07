@@ -72,4 +72,5 @@ jobs:
           for asset in ./artifact/*; do
             assets+=("-a" "$asset")
           done
+          sleep 1
           hub release edit "${assets[@]}" -m "This release was built on the latest code and may be unstable. USE AT YOUR OWN RISK!" $todayDate
