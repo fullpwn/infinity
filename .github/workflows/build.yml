@@ -19,14 +19,12 @@ jobs:
       env:
         ARCH: amd64
       run: |
-        env
         sudo -E ./build.sh
     - 
       name: Build for i686
       env:
         ARCH: i686
       run: |
-        env
         sudo -E ./build.sh
     -
       name: Upload artifacts
