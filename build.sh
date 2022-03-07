@@ -68,19 +68,22 @@ start_time="$(date -u +%s)"
 
 # Install dependencies to build odysseyn1x
 apt-get update
-apt-get install -y --no-install-recommends wget debootstrap grub-pc-bin \
+apt-get install -y --no-install-recommends wget debootstrap \
     mtools squashfs-tools xorriso ca-certificates curl \
     libusb-1.0-0-dev gcc make gzip xz-utils unzip libc6-dev
 
 if [ "$ARCH" = 'amd64' ]; then
     REPO_ARCH='amd64' # Debian's 64-bit repos are "amd64"
     KERNEL_ARCH='amd64' # Debian's 32-bit kernels are suffixed "amd64"
-    apt install -y --no-install-recommends grub-efi-amd64-bin
+    apt install -y --no-install-recommends grub-efi-amd64-bin grub-pc-bin
 else
+    # remove all grub packges (specifically grub-efi-amd64-*). grub-mkrescue doesn't have any architecture configuration other than the set of installed packages.
+    apt-get remove -y '.grub.'
+    
     # Install depencies to build odysseyn1x for i686
     dpkg --add-architecture i386
     apt-get update
-    apt install -y --no-install-recommends libusb-1.0-0-dev:i386 gcc-multilib grub-efi-ia32-bin
+    apt install -y --no-install-recommends libusb-1.0-0-dev:i386 gcc-multilib grub-efi-ia32-bin grub-pc-bin
     REPO_ARCH='i386' # Debian's 32-bit repos are "i386"
     KERNEL_ARCH='686' # Debian's 32-bit kernels are suffixed "-686"
 fi
