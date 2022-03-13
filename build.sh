@@ -79,7 +79,7 @@ if [ "$ARCH" = 'amd64' ]; then
 else
     # remove grub-efi-amd64-bin. grub-mkrescue doesn't have any architecture configuration other than the set of installed packages.
     apt-get remove -y --allow-remove-essential grub-efi-amd64-bin grub-efi-amd64-signed
-    
+
     # Install depencies to build odysseyn1x for i686
     dpkg --add-architecture i386
     apt-get update
